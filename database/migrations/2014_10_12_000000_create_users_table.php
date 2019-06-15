@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('phone');
             $table->enum('source', ['web', 'app']);
-            $table->enum('type');
+            $table->integer('role')->default(1);
             $table->string('password');
             $table->string('is_premium');
             $table->date('birthday');
