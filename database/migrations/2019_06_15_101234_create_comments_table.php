@@ -18,10 +18,10 @@ class CreateCommentsTable extends Migration
             $table->string('body');
             $table->bigInteger('user_id');
             $table->bigInteger('post_id');
-            $table->boolean('is_anonymous');
-            $table->string('location_id');
+            $table->boolean('is_anonymous')->default(false);
+            $table->integer('location_id')->nullable();
             $table->enum('source', ['web', 'app']);
-            $table->enum('status', ['approved', 'pending', 'spam', 'reject']);
+            $table->enum('status', ['approved', 'pending', 'spam', 'reject'])->default('approved');
             $table->timestamps();
         });
     }

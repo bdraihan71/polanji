@@ -17,13 +17,13 @@ class CreatePostsTable extends Migration
             $table->bigIncrements('id');
             $table->string('body');
             $table->bigInteger('user_id');
-            $table->integer('category_id');
-            $table->string('tag_id');
-            $table->string('is_premium');
-            $table->boolean('is_anonymous');
-            $table->string('location_id');
+            $table->integer('category_id')->nullable();
+            $table->string('tag_id')->nullable();
+            $table->integer('premium_id')->default(1);
+            $table->boolean('is_anonymous')->default(false);
+            $table->integer('location_id')->nullable();
             $table->enum('source', ['web', 'app']);
-            $table->enum('status', ['approved', 'pending', 'spam', 'reject']);
+            $table->enum('status', ['approved', 'pending', 'spam', 'reject'])->default('approved');
             $table->timestamps();
         });
     }
