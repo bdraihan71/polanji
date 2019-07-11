@@ -44,6 +44,11 @@
                                     <button class="btn btn-danger">Delete</button>
                                 </form>
                             @endif
+                            <div class="mt-3">
+                                @foreach ($post->comments as $comment)
+                                    <h6 class="mb-2"><b><i>{{  $comment->is_anonymous == 0 ? $comment->user->f_name .' '.$comment->user->l_name : 'Anonymous' }}</i> </b>{{ '  '. $comment->body }}</h6>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
             @endforeach
