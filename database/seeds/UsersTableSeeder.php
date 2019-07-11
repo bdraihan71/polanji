@@ -19,5 +19,14 @@ class UsersTableSeeder extends Seeder
             'email_verified_at' => new DateTime,
             'password' => bcrypt('bangladesh')
         ]);
+
+        DB::table('users')->insert([
+            'id' => 2,
+            'email' => 'vondo@gmail.com',
+            'f_name' => 'Vondo',
+            'l_name' => 'Khan',
+            'email_verified_at' => new DateTime,
+            'password' => bcrypt('bangladesh')
+        ]);
     }
 }
