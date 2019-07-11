@@ -11,10 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', 'PostController@index')->name('post.index');
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/post', 'PostController@store')->name('post.store');
+    Route::delete('/post/{id}', 'PostController@destroy')->name('post.destroy');
+    Route::get('/mypost', 'PostController@ownPostIndex')->name('post.ownPostIndex');
 });
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');
