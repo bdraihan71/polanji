@@ -80,6 +80,36 @@
                                             </form>
                                         @endif
                                     </h6>
+                                    {{-- replay --}}
+                                    <div class="container" id="myDIV{{ $count }}" style="display:none">
+                                        <form  method="post" action="{{ route('reply.store') }}"  class="text-muted m-2">
+                                            @csrf
+                                            <input type="hidden" name="source" value="web">
+                                            <input type="hidden" name="post_id" value= {{ $post->id }}>
+                                            <input type="hidden" name="comment_id" value= {{ $comment->id }}>
+                                            <div class="form-group">
+                                                <textarea class="form-control" name="body" id="body" rows="2"></textarea>
+                                            </div>
+                                            <div class="form-check mb-2">
+                                                <input type="checkbox" name="is_anonymous" value="1" class="form-check-input" id={{ $post->id }}>
+                                                <label class="form-check-label" for={{ $post->id }}>Hide My Name</label>
+                                            </div>
+                                            <button class="btn btn-outline-success btn-block">Submit Comment</button>
+                                        </form>
+                                    </div>
+                                    @foreach ($comment->replies as $reply)
+                                        <div class="ml-5 p-1">
+                                            <div class="mb-2 d-inline"><b><i>{{  $reply->is_anonymous == 0 ? $reply->user->f_name .' '.$reply->user->l_name : 'Anonymous' }}</i> </b>{{ '  '. $reply->body }}</div>
+                                            @if(Auth::check() && Auth::id() == $comment->user->id)
+                                                <form action="{{ route('reply.destroy', $reply->id)}}" onclick="return confirm('Are you sure, you want to delete this Reply?')" method="post" style="display: inline;">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button class="btn btn-danger">Delete</button>
+                                                </form>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                    {{-- end of replay --}}
                                 @endforeach
                             </div>
                             {{-- end of commet --}}

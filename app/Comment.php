@@ -16,7 +16,7 @@ class Comment extends PolanjiModel
         return $this->belongsTo('App\Post');
     }
 
-    public function replys()
+    public function replies()
     {
         return $this->hasMany('App\Reply');
     }
