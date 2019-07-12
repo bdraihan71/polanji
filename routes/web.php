@@ -26,6 +26,10 @@ Route::middleware(['auth'])->group(function () {
     //comment
     Route::post('/comment', 'CommentController@store')->name('comment.store');
     Route::delete('/comment/{id}', 'CommentController@destroy')->name('comment.destroy');
+
+    //reply
+    Route::post('/reply', 'ReplyController@store')->name('reply.store');
+    Route::delete('/reply/{id}', 'ReplyController@destroy')->name('reply.destroy');
 });
 
 Auth::routes();
