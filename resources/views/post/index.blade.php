@@ -28,6 +28,7 @@
             {{-- all post --}}
             @php
             $count = 0;
+            $replycount = 0;
             @endphp
             @foreach ($posts as $post)
                 <div class="card mb-2">
@@ -36,7 +37,7 @@
                             <h4>{{ $post->body }}</h4>
                             <hr>
                             @if(Auth::check())
-                                <button onclick="myFunction({{ $count }})" class="btn default">Comment</button>
+                                <button onclick="myFunction({{ $count }}, 'comment', 'reply', {{ $replycount }})" class="btn default">Comment</button>
                             @else
                                 <button class="btn default"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}">Comment</a></button>
                             @endif
@@ -48,7 +49,7 @@
                                 </form>
                             @endif
                             {{-- commet --}}
-                            <div class="container" id="myDIV{{ $count }}" style="display:none">
+                            <div class="container" id="myDIVcomment{{ $count }}reply{{ $replycount }}" style="display:none">
                                 <form  method="post" action="{{ route('comment.store') }}"  class="text-muted m-2">
                                     @csrf
                                     <input type="hidden" name="source" value="web">
@@ -68,7 +69,7 @@
                                     <h6>
                                         <div class="mb-2 d-inline"><b><i>{{  $comment->is_anonymous == 0 ? $comment->user->f_name .' '.$comment->user->l_name : 'Anonymous' }}</i> </b>{{ '  '. $comment->body }}</div>
                                         @if(Auth::check())
-                                            <button onclick="myFunction({{ $count }})" class="btn default">Reply</button>
+                                            <button onclick="myFunction({{ $count }}, 'comment', 'reply', {{ $comment->id }})" class="btn default">Reply</button>
                                         @else
                                             <button class="btn default"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}">Reply</a></button>
                                         @endif
@@ -81,7 +82,7 @@
                                         @endif
                                     </h6>
                                     {{-- replay --}}
-                                    <div class="container" id="myDIV{{ $count }}" style="display:none">
+                                    <div class="container" id="myDIVcomment{{ $count }}reply{{ $comment->id }}" style="display:none">
                                         <form  method="post" action="{{ route('reply.store') }}"  class="text-muted m-2">
                                             @csrf
                                             <input type="hidden" name="source" value="web">
@@ -94,13 +95,13 @@
                                                 <input type="checkbox" name="is_anonymous" value="1" class="form-check-input" id={{ $post->id }}>
                                                 <label class="form-check-label" for={{ $post->id }}>Hide My Name</label>
                                             </div>
-                                            <button class="btn btn-outline-success btn-block">Submit Comment</button>
+                                            <button class="btn btn-outline-primary btn-block">Submit Reply</button>
                                         </form>
                                     </div>
                                     @foreach ($comment->replies as $reply)
                                         <div class="ml-5 p-1">
                                             <div class="mb-2 d-inline"><b><i>{{  $reply->is_anonymous == 0 ? $reply->user->f_name .' '.$reply->user->l_name : 'Anonymous' }}</i> </b>{{ '  '. $reply->body }}</div>
-                                            @if(Auth::check() && Auth::id() == $comment->user->id)
+                                            @if(Auth::check() && Auth::id() == $reply->user->id)
                                                 <form action="{{ route('reply.destroy', $reply->id)}}" onclick="return confirm('Are you sure, you want to delete this Reply?')" method="post" style="display: inline;">
                                                     @csrf
                                                     @method('delete')
@@ -126,8 +127,8 @@
 @endsection
 
 <script>
-    function myFunction(count) {
-    var x = document.getElementById("myDIV"+count);
+    function myFunction(count, comment, reply, replycount) {
+    var x = document.getElementById("myDIV"+ comment + count + reply +replycount);
     if (x.style.display === "none") {
         x.style.display = "block";
     } else {
