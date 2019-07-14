@@ -55,6 +55,7 @@
                                     @csrf
                                     <input type="hidden" name="source" value="web">
                                     <input type="hidden" name="post_id" value= {{ $post->id }}>
+                                    <input type="hidden" name="id" value="#myanchorid{{ $count}}">
                                     <div class="form-group">
                                         <textarea class="form-control" name="body" id="body" rows="2"></textarea>
                                     </div>
@@ -78,6 +79,7 @@
                                             <form action="{{ route('comment.destroy', $comment->id)}}" onclick="return confirm('Are you sure, you want to delete this comment?')" method="post" style="display: inline;">
                                                 @csrf
                                                 @method('delete')
+                                                <input type="hidden" name="id" value="#myanchorid{{ $count}}">
                                                 <button class="btn btn-danger">Delete</button>
                                             </form>
                                         @endif
@@ -89,6 +91,7 @@
                                             <input type="hidden" name="source" value="web">
                                             <input type="hidden" name="post_id" value= {{ $post->id }}>
                                             <input type="hidden" name="comment_id" value= {{ $comment->id }}>
+                                            <input type="hidden" name="id" value="#myanchorid{{ $count}}">
                                             <div class="form-group">
                                                 <textarea class="form-control" name="body" id="body" rows="2"></textarea>
                                             </div>
@@ -106,6 +109,7 @@
                                                 <form action="{{ route('reply.destroy', $reply->id)}}" onclick="return confirm('Are you sure, you want to delete this Reply?')" method="post" style="display: inline;">
                                                     @csrf
                                                     @method('delete')
+                                                    <input type="hidden" name="id" value="#myanchorid{{ $count}}">
                                                     <button class="btn btn-danger">Delete</button>
                                                 </form>
                                             @endif

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Reply;
 use Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
 class ReplyController extends Controller
 {
@@ -24,12 +26,12 @@ class ReplyController extends Controller
             'is_anonymous' =>  $is_anonymous,
         ]);
         $reply->save();
-        return redirect()->back();
+        return Redirect::to(URL::previous() . $request->id);
     }
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $reply = Reply::find($id);
         $reply->delete();
-        return redirect()->back();
+        return Redirect::to(URL::previous() . $request->id);
     }
 }
