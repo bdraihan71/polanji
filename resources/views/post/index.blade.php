@@ -32,7 +32,7 @@
             @endphp
             @foreach ($posts as $post)
                 <div class="card mb-2">
-                        <div class="card-body">
+                        <div class="card-body" id="myanchorid{{ $count }}">
                             <p>{{  $post->is_anonymous == 0 ? $post->user->f_name .' '.$post->user->l_name : 'Anonymous ' }}</p>
                             <h4>{{ $post->body }}</h4>
                             <hr>
@@ -42,9 +42,10 @@
                                 <button class="btn default"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}">Comment</a></button>
                             @endif
                             @if(Auth::check() && Auth::id() == $post->user->id)
-                                <form action="{{ route('post.destroy', $post->id)}}" onclick="return confirm('Are you sure, you want to delete this post?')" method="post" style="display: inline;">
+                                <form action="{{ route('post.destroy', ['post' => $post->id])}}" onclick="return confirm('Are you sure, you want to delete this post?')" method="post" style="display: inline;">
                                     @csrf
                                     @method('delete')
+                                    <input type="hidden" name="id" value="#myanchorid{{ $count}}">
                                     <button class="btn btn-danger">Delete</button>
                                 </form>
                             @endif

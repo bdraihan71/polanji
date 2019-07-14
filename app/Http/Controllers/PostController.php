@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Post;
 use App\Comment;
 use Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
 class PostController extends Controller
 {
@@ -39,11 +41,11 @@ class PostController extends Controller
         return redirect()->back();
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $post = Post::find($id);
         $post->delete();
-        return redirect()->back();
+        return Redirect::to(URL::previous() . $request->id);
     }
 
 }
