@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Comment;
 use Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
 class CommentController extends Controller
 {
@@ -23,13 +25,13 @@ class CommentController extends Controller
             'post_id' => $request->get('post_id'),
         ]);
         $comment->save();
-        return redirect()->back();
+        return Redirect::to(URL::previous() . $request->id);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $comment = Comment::find($id);
         $comment->delete();
-        return redirect()->back();
+        return Redirect::to(URL::previous() . $request->id);
     }
 }
