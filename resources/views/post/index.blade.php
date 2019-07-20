@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
+<div class="container infinite-scroll mt-5">
+    <div class="row justify-content-center ">
         <div class="col-md-8">
             {{-- create post --}}
             @if(Auth::check())
-                <div class="card mb-2">
+                <div class="card mb-3 card-1">
                     <div class="card-header">Create Post</div>
                     <div class="card-body">
                         <form  method="post" action="{{ route('post.store') }}"  class="text-muted">
@@ -15,11 +15,13 @@
                             <div class="form-group">
                                 <textarea class="form-control" name="body" id="body" rows="3"></textarea>
                             </div>
-                            <div class="form-check mb-2">
-                                <input type="checkbox" name="is_anonymous" value="1" class="form-check-input" id="exampleCheck1">
-                                <label class="form-check-label" for="exampleCheck1">Hide My Name</label>
-                              </div>
-                            <button class="btn btn-outline-info btn-block">Submit Question</button>
+                            <div class="form-inline float-right">
+                                <div class="form-check mr-2">
+                                    <input type="checkbox" name="is_anonymous" value="1" class="form-check-input" id="exampleCheck1">
+                                    <label class="form-check-label text-dark" for="exampleCheck1">Hide My Name</label>
+                                </div>
+                                <button class="btn btn-success ripple ">Submit Question</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -31,7 +33,7 @@
             $replycount = 0;
             @endphp
             @foreach ($posts as $post)
-                <div class="card mb-2">
+                <div class="card mb-2 card-2">
                         <div class="card-body" id="myanchorid{{ $count }}">
                             <p>{{  $post->is_anonymous == 0 ? $post->user->f_name .' '.$post->user->l_name : 'Anonymous ' }}</p>
                             <h4>{{ $post->body }}</h4>
@@ -125,6 +127,7 @@
                         </div>
                     </div>
             @endforeach
+            {{-- {{ $posts->links() }} --}}
             {{-- end of all post --}}
         </div>
     </div>
@@ -140,4 +143,7 @@
         x.style.display = "none";
     }
     }
+
+
+
 </script>
