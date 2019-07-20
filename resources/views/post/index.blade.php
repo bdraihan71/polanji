@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
+<div class="container infinite-scroll mt-5">
+    <div class="row justify-content-center ">
         <div class="col-md-8">
             {{-- create post --}}
             @if(Auth::check())
-                <div class="card mb-2">
+                <div class="card mb-3 card-1">
                     <div class="card-header">Create Post</div>
                     <div class="card-body">
                         <form  method="post" action="{{ route('post.store') }}"  class="text-muted">
@@ -15,11 +15,13 @@
                             <div class="form-group">
                                 <textarea class="form-control" name="body" id="body" rows="3"></textarea>
                             </div>
-                            <div class="form-check mb-2">
-                                <input type="checkbox" name="is_anonymous" value="1" class="form-check-input" id="exampleCheck1">
-                                <label class="form-check-label" for="exampleCheck1">Hide My Name</label>
-                              </div>
-                            <button class="btn btn-outline-info btn-block">Submit Question</button>
+                            <div class="form-inline float-right">
+                                <div class="form-check mr-2">
+                                    <input type="checkbox" name="is_anonymous" value="1" class="form-check-input" id="exampleCheck1" checked>
+                                    <label class="form-check-label text-dark" for="exampleCheck1">Hide My Name</label>
+                                </div>
+                                <button class="btn btn-success ripple ">Submit Question</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -31,26 +33,35 @@
             $replycount = 0;
             @endphp
             @foreach ($posts as $post)
-                <div class="card mb-2">
+                <div class="card mb-2 card-2">
                         <div class="card-body" id="myanchorid{{ $count }}">
-                            <p>{{  $post->is_anonymous == 0 ? $post->user->f_name .' '.$post->user->l_name : 'Anonymous ' }}</p>
-                            <h4>{{ $post->body }}</h4>
+                            <div class="cardinfo mb-3">
+                                <img src="{{ $post->is_anonymous == 1 ? '/img/anonymous.png' : ($post->user->gender == 'female' ? '/img/female.png' : ($post->user->gender == 'male' ? '/img/male.png' : '/img/other.png'))}}" class="float-left" >
+                                <p class="d-inline ml-2"><a href="#">{{  $post->is_anonymous == 0 ? $post->user->f_name .' '.$post->user->l_name : 'Anonymous ' }}</a></p><br>
+                                <p class="d-inline ml-2">{{ $post->created_at->diffForHumans() }}</p>
+                            </div>
+                            <h5 class="mp-5 ">{{ $post->body }}</h5>
                             <hr>
                             @if(Auth::check())
-                                <button onclick="myFunction({{ $count }}, 'comment', 'reply', {{ $replycount }})" class="btn default">Comment</button>
+                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="#"><i class="far fa-thumbs-up"></i> Like</a></button>
+                                <button onclick="myFunction({{ $count }}, 'comment', 'reply', {{ $replycount }})" class="btn btn-white"><i class="far fa-comment"></i> Comment</button>
+                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="#"><i class="fas fa-share"></i> Share</a></button>
                             @else
-                                <button class="btn default"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}">Comment</a></button>
+                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}"><i class="far fa-thumbs-up"></i> Like</a></button>
+                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}"><i class="far fa-comment"></i> Comment</a></button>
+                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}"><i class="fas fa-share"></i> Share</a></button>
                             @endif
                             @if(Auth::check() && Auth::id() == $post->user->id)
                                 <form action="{{ route('post.destroy', ['post' => $post->id])}}" onclick="return confirm('Are you sure, you want to delete this post?')" method="post" style="display: inline;">
                                     @csrf
                                     @method('delete')
                                     <input type="hidden" name="id" value="#myanchorid{{ $count}}">
-                                    <button class="btn btn-danger">Delete</button>
+                                    <button class="btn btn-white text-danger">Delete</button>
                                 </form>
                             @endif
+                            <hr>
                             {{-- commet --}}
-                            <div class="container" id="myDIVcomment{{ $count }}reply{{ $replycount }}" style="display:none">
+                            <div class="container mb-5" id="myDIVcomment{{ $count }}reply{{ $replycount }}" style="display:none">
                                 <form  method="post" action="{{ route('comment.store') }}"  class="text-muted m-2">
                                     @csrf
                                     <input type="hidden" name="source" value="web">
@@ -59,33 +70,42 @@
                                     <div class="form-group">
                                         <textarea class="form-control" name="body" id="body" rows="2"></textarea>
                                     </div>
-                                    <div class="form-check mb-2">
-                                        <input type="checkbox" name="is_anonymous" value="1" class="form-check-input" id={{ $post->id }}>
-                                        <label class="form-check-label" for={{ $post->id }}>Hide My Name</label>
+                                    <div class="form-inline float-right ">
+                                        <div class="form-check mr-2">
+                                            <input type="checkbox" name="is_anonymous" value="1" class="form-check-input" id={{ $post->id }} checked>
+                                            <label class="form-check-label text-dark" for={{ $post->id }}>Hide My Name</label>
+                                        </div>
+                                        <button class="btn btn-success ripple ">Submit Comment</button>
                                     </div>
-                                    <button class="btn btn-outline-success btn-block">Submit Comment</button>
                                 </form>
-                            </div>
-                            <div class="mt-3">
+                            </div><br>
+                            <div>
                                 @foreach ($post->comments as $comment)
-                                    <h6>
-                                        <div class="mb-2 d-inline"><b><i>{{  $comment->is_anonymous == 0 ? $comment->user->f_name .' '.$comment->user->l_name : 'Anonymous' }}</i> </b>{{ '  '. $comment->body }}</div>
-                                        @if(Auth::check())
-                                            <button onclick="myFunction({{ $count }}, 'comment', 'reply', {{ $comment->id }})" class="btn default">Reply</button>
-                                        @else
-                                            <button class="btn default"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}">Reply</a></button>
-                                        @endif
-                                        @if(Auth::check() && Auth::id() == $comment->user->id)
-                                            <form action="{{ route('comment.destroy', $comment->id)}}" onclick="return confirm('Are you sure, you want to delete this comment?')" method="post" style="display: inline;">
-                                                @csrf
-                                                @method('delete')
-                                                <input type="hidden" name="id" value="#myanchorid{{ $count}}">
-                                                <button class="btn btn-danger">Delete</button>
-                                            </form>
-                                        @endif
-                                    </h6>
+                                        <div class="cardcomment row mb-3">
+                                            <div class=" col-md-1">
+                                                <img class="mr-2" src="{{ $comment->is_anonymous == 1 ? '/img/anonymous.png' : ($comment->user->gender == 'female' ? '/img/female.png' : ($comment->user->gender == 'male' ? '/img/male.png' : '/img/other.png'))}}" class="float-left" >
+                                            </div>
+                                            <div class="col-md-11 mt-2">
+                                                <p class="d-inline commentbody"><b>{{  $comment->is_anonymous == 0 ? $comment->user->f_name .' '.$comment->user->l_name : 'Anonymous' }}</b>{{ '  '. $comment->body }}</p><br>
+                                                @if(Auth::check())
+                                                    <a  class="btn underline text-primary">Like</a>
+                                                    <a onclick="myFunction({{ $count }}, 'comment', 'reply', {{ $comment->id }})" class="btn underline text-primary">Reply</a>
+                                                @else
+                                                    <a class="btn underline text-primary" style=" text-decoration: none !important; color:black" href="{{ route('login') }}">Like</a>
+                                                    <a class="btn underline text-primary" style=" text-decoration: none !important; color:black" href="{{ route('login') }}">Reply</a>
+                                                @endif
+                                                @if(Auth::check() && Auth::id() == $comment->user->id)
+                                                    <form action="{{ route('comment.destroy', $comment->id)}}" onclick="return confirm('Are you sure, you want to delete this comment?')" method="post" style="display: inline;">
+                                                        @csrf
+                                                        @method('delete')
+                                                        <input type="hidden" name="id" value="#myanchorid{{ $count}}">
+                                                        <a class="btn text-danger underline">Delete</a>
+                                                    </form>
+                                                @endif
+                                            </div>
+                                        </div>
                                     {{-- replay --}}
-                                    <div class="container" id="myDIVcomment{{ $count }}reply{{ $comment->id }}" style="display:none">
+                                    <div class="container col-md-11 mb-5" id="myDIVcomment{{ $count }}reply{{ $comment->id }}" style="display:none">
                                         <form  method="post" action="{{ route('reply.store') }}"  class="text-muted m-2">
                                             @csrf
                                             <input type="hidden" name="source" value="web">
@@ -95,24 +115,39 @@
                                             <div class="form-group">
                                                 <textarea class="form-control" name="body" id="body" rows="2"></textarea>
                                             </div>
-                                            <div class="form-check mb-2">
-                                                <input type="checkbox" name="is_anonymous" value="1" class="form-check-input" id={{ $post->id }}>
-                                                <label class="form-check-label" for={{ $post->id }}>Hide My Name</label>
+                                            <div class="form-inline float-right ">
+                                                <div class="form-check mr-2">
+                                                    <input type="checkbox" name="is_anonymous" value="1" class="form-check-input" id={{ $post->id }}>
+                                                    <label class="form-check-label" for={{ $post->id }}>Hide My Name</label>
+                                                </div>
+                                                <button class="btn btn-success ripple ">Submit Reply</button>
                                             </div>
-                                            <button class="btn btn-outline-primary btn-block">Submit Reply</button>
                                         </form>
-                                    </div>
+
+                                    </div><br>
                                     @foreach ($comment->replies as $reply)
-                                        <div class="ml-5 p-1">
-                                            <div class="mb-2 d-inline"><b><i>{{  $reply->is_anonymous == 0 ? $reply->user->f_name .' '.$reply->user->l_name : 'Anonymous' }}</i> </b>{{ '  '. $reply->body }}</div>
-                                            @if(Auth::check() && Auth::id() == $reply->user->id)
-                                                <form action="{{ route('reply.destroy', $reply->id)}}" onclick="return confirm('Are you sure, you want to delete this Reply?')" method="post" style="display: inline;">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <input type="hidden" name="id" value="#myanchorid{{ $count}}">
-                                                    <button class="btn btn-danger">Delete</button>
-                                                </form>
-                                            @endif
+                                        <div class="ml-5">
+                                            <div class="cardreply row">
+                                                <div class=" col-md-1">
+                                                    <img class="mr-2 " src="{{ $reply->is_anonymous == 1 ? '/img/anonymous.png' : ($reply->user->gender == 'female' ? '/img/female.png' : ($reply->user->gender == 'male' ? '/img/male.png' : '/img/other.png'))}}" class="float-left" >
+                                                </div>
+                                                <div class="col-md-11">
+                                                    <p><b>{{  $reply->is_anonymous == 0 ? $reply->user->f_name .' '.$reply->user->l_name : 'Anonymous' }}</b>{{ '  '. $reply->body }}</p>
+                                                    @if(Auth::check())
+                                                        <a  class="btn underline text-primary">Like</a>
+                                                    @else
+                                                        <a class="btn underline text-primary" style=" text-decoration: none !important; color:black" href="{{ route('login') }}">Like</a>
+                                                    @endif
+                                                    @if(Auth::check() && Auth::id() == $reply->user->id)
+                                                        <form action="{{ route('reply.destroy', $reply->id)}}" onclick="return confirm('Are you sure, you want to delete this Reply?')" method="post" style="display: inline;">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <input type="hidden" name="id" value="#myanchorid{{ $count}}">
+                                                            <a class="btn text-danger underline ">Delete</a>
+                                                        </form>
+                                                    @endif
+                                                </div>
+                                            </div>
                                         </div>
                                     @endforeach
                                     {{-- end of replay --}}
@@ -125,6 +160,7 @@
                         </div>
                     </div>
             @endforeach
+            {{-- {{ $posts->links() }} --}}
             {{-- end of all post --}}
         </div>
     </div>
@@ -140,4 +176,7 @@
         x.style.display = "none";
     }
     }
+
+
+
 </script>

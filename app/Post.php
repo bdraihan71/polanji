@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends PolanjiModel
 {
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
+    
     public function user()
     {
         return $this->belongsTo('App\User');

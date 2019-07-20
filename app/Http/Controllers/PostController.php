@@ -13,6 +13,7 @@ class PostController extends Controller
 {
     public function index()
     {
+        //$posts = Post::latest()->paginate(2);
         $posts = Post::latest()->get();
         return view('post.index', compact('posts'));
 
@@ -20,6 +21,7 @@ class PostController extends Controller
 
     public function ownPostIndex()
     {
+        $posts = Post::where('user_id', auth()->id())->latest()->paginate(2);
         $posts = Post::where('user_id', auth()->id())->latest()->get();
         return view('post.index', compact('posts'));
     }
