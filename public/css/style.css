@@ -60,11 +60,9 @@ body{
     height:auto;
     border: 1px solid #E0E0E0;
 }
-
-.commentbody b{
-    padding-top: 10px;
+.underline:hover{
+    text-decoration: underline !important;
 }
-
 .btn-white{
     background-color: white;
 }

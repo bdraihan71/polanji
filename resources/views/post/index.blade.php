@@ -43,13 +43,13 @@
                             <h5 class="mp-5 ">{{ $post->body }}</h5>
                             <hr>
                             @if(Auth::check())
-                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="#">Like</a></button>
-                                <button onclick="myFunction({{ $count }}, 'comment', 'reply', {{ $replycount }})" class="btn btn-white">Comment</button>
-                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="#">Share</a></button>
+                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="#"><i class="far fa-thumbs-up"></i> Like</a></button>
+                                <button onclick="myFunction({{ $count }}, 'comment', 'reply', {{ $replycount }})" class="btn btn-white"><i class="far fa-comment"></i> Comment</button>
+                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="#"><i class="fas fa-share"></i> Share</a></button>
                             @else
-                                <button class="btn default"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}">Like</a></button>
-                                <button class="btn default"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}">Comment</a></button>
-                                <button class="btn default"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}">Share</a></button>
+                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}"><i class="far fa-thumbs-up"></i> Like</a></button>
+                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}"><i class="far fa-comment"></i> Comment</a></button>
+                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}"><i class="fas fa-share"></i> Share</a></button>
                             @endif
                             @if(Auth::check() && Auth::id() == $post->user->id)
                                 <form action="{{ route('post.destroy', ['post' => $post->id])}}" onclick="return confirm('Are you sure, you want to delete this post?')" method="post" style="display: inline;">
@@ -61,7 +61,7 @@
                             @endif
                             <hr>
                             {{-- commet --}}
-                            <div class="container" id="myDIVcomment{{ $count }}reply{{ $replycount }}" style="display:none">
+                            <div class="container mb-5" id="myDIVcomment{{ $count }}reply{{ $replycount }}" style="display:none">
                                 <form  method="post" action="{{ route('comment.store') }}"  class="text-muted m-2">
                                     @csrf
                                     <input type="hidden" name="source" value="web">
@@ -72,32 +72,38 @@
                                     </div>
                                     <div class="form-inline float-right ">
                                         <div class="form-check mr-2">
-                                            <input type="checkbox" name="is_anonymous" value="1" class="form-check-input" id={{ $post->id }}>
+                                            <input type="checkbox" name="is_anonymous" value="1" class="form-check-input" id={{ $post->id }} checked>
                                             <label class="form-check-label text-dark" for={{ $post->id }}>Hide My Name</label>
                                         </div>
                                         <button class="btn btn-success ripple ">Submit Comment</button>
                                     </div>
                                 </form>
-                            </div>
-                            <div class="mt-5">
+                            </div><br>
+                            <div class="mt-2">
                                 @foreach ($post->comments as $comment)
-                                        <div class="cardcomment mb-3">
+                                        <div class="cardcomment row mb-3">
+                                            <div class=" col-md-1">
                                                 <img class="mr-2" src="{{ $comment->is_anonymous == 1 ? '/img/anonymous.png' : ($comment->user->gender == 'female' ? '/img/female.png' : ($comment->user->gender == 'male' ? '/img/male.png' : '/img/other.png'))}}" class="float-left" >
-                                                <div class="d-inline commentbody"><b>{{  $comment->is_anonymous == 0 ? $comment->user->f_name .' '.$comment->user->l_name : 'Anonymous' }}</b>{{ '  '. $comment->body }}</div>
+                                            </div>
+                                            <div class="col-md-11 mt-2">
+                                                <p class="d-inline commentbody"><b>{{  $comment->is_anonymous == 0 ? $comment->user->f_name .' '.$comment->user->l_name : 'Anonymous' }}</b>{{ '  '. $comment->body }}</p><br>
+                                                @if(Auth::check())
+                                                    <a  class="btn underline text-primary">Like</a>
+                                                    <a onclick="myFunction({{ $count }}, 'comment', 'reply', {{ $comment->id }})" class="btn underline text-primary">Reply</a>
+                                                @else
+                                                    <a class="btn underline text-primary" style=" text-decoration: none !important; color:black" href="{{ route('login') }}">Like</a>
+                                                    <a class="btn underline text-primary" style=" text-decoration: none !important; color:black" href="{{ route('login') }}">Reply</a>
+                                                @endif
+                                                @if(Auth::check() && Auth::id() == $comment->user->id)
+                                                    <form action="{{ route('comment.destroy', $comment->id)}}" onclick="return confirm('Are you sure, you want to delete this comment?')" method="post" style="display: inline;">
+                                                        @csrf
+                                                        @method('delete')
+                                                        <input type="hidden" name="id" value="#myanchorid{{ $count}}">
+                                                        <a class="btn text-danger underline">Delete</a>
+                                                    </form>
+                                                @endif
+                                            </div>
                                         </div>
-                                        @if(Auth::check())
-                                            <button onclick="myFunction({{ $count }}, 'comment', 'reply', {{ $comment->id }})" class="btn default">Reply</button>
-                                        @else
-                                            <button class="btn default"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}">Reply</a></button>
-                                        @endif
-                                        @if(Auth::check() && Auth::id() == $comment->user->id)
-                                            <form action="{{ route('comment.destroy', $comment->id)}}" onclick="return confirm('Are you sure, you want to delete this comment?')" method="post" style="display: inline;">
-                                                @csrf
-                                                @method('delete')
-                                                <input type="hidden" name="id" value="#myanchorid{{ $count}}">
-                                                <button class="btn btn-danger">Delete</button>
-                                            </form>
-                                        @endif
                                     {{-- replay --}}
                                     <div class="container" id="myDIVcomment{{ $count }}reply{{ $comment->id }}" style="display:none">
                                         <form  method="post" action="{{ route('reply.store') }}"  class="text-muted m-2">
@@ -118,13 +124,13 @@
                                     </div>
                                     @foreach ($comment->replies as $reply)
                                         <div class="ml-5 p-1">
-                                            <div class="mb-2 d-inline"><b><i>{{  $reply->is_anonymous == 0 ? $reply->user->f_name .' '.$reply->user->l_name : 'Anonymous' }}</i> </b>{{ '  '. $reply->body }}</div>
+                                            <div class="mb-2 d-inline"><b>{{  $reply->is_anonymous == 0 ? $reply->user->f_name .' '.$reply->user->l_name : 'Anonymous' }}</b>{{ '  '. $reply->body }}</div>
                                             @if(Auth::check() && Auth::id() == $reply->user->id)
                                                 <form action="{{ route('reply.destroy', $reply->id)}}" onclick="return confirm('Are you sure, you want to delete this Reply?')" method="post" style="display: inline;">
                                                     @csrf
                                                     @method('delete')
                                                     <input type="hidden" name="id" value="#myanchorid{{ $count}}">
-                                                    <button class="btn btn-danger">Delete</button>
+                                                    <a class="btn text-danger underline ">Delete</a>
                                                 </form>
                                             @endif
                                         </div>
