@@ -37,7 +37,7 @@
                         <div class="card-body" id="myanchorid{{ $count }}">
                             <div class="cardinfo mb-3">
                                 <img src="{{ $post->is_anonymous == 1 ? '/img/anonymous.png' : ($post->user->gender == 'female' ? '/img/female.png' : ($post->user->gender == 'male' ? '/img/male.png' : '/img/other.png'))}}" class="float-left" >
-                                <p class="d-inline ml-2"><a href="#">{{  $post->is_anonymous == 0 ? $post->user->f_name .' '.$post->user->l_name : 'Anonymous ' }}</a></p><br>
+                                <p class="d-inline ml-2">{{  $post->is_anonymous == 0 ? $post->user->f_name .' '.$post->user->l_name : 'Anonymous ' }}</p><br>
                                 <p class="d-inline ml-2">{{ $post->created_at->diffForHumans() }}</p>
                             </div>
                             <h5 class="mp-5 ">{{ $post->body }}</h5>
