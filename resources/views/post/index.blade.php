@@ -132,7 +132,7 @@
                                                     <img class="mr-2 " src="{{ $reply->is_anonymous == 1 ? '/img/anonymous.png' : ($reply->user->gender == 'female' ? '/img/female.png' : ($reply->user->gender == 'male' ? '/img/male.png' : '/img/other.png'))}}" class="float-left" >
                                                 </div>
                                                 <div class="col-md-11">
-                                                    <p><b>{{  $reply->is_anonymous == 0 ? $reply->user->f_name .' '.$reply->user->l_name : 'Anonymous' }}</b>{{ '  '. $reply->body }}</p>
+                                                    <p class=" d-inline "><b>{{  $reply->is_anonymous == 0 ? $reply->user->f_name .' '.$reply->user->l_name : 'Anonymous' }}</b>{{ '  '. $reply->body }}</p><br>
                                                     @if(Auth::check())
                                                         <a  class="btn underline text-primary">Like</a>
                                                     @else
