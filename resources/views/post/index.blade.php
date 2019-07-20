@@ -37,8 +37,8 @@
                         <div class="card-body" id="myanchorid{{ $count }}">
                             <div class="cardinfo mb-3">
                                 <img src="{{ $post->is_anonymous == 1 ? '/img/anonymous.png' : ($post->user->gender == 'female' ? '/img/female.png' : ($post->user->gender == 'male' ? '/img/male.png' : '/img/other.png'))}}" class="float-left" >
-                                <p class="d-inline ml-2">{{  $post->is_anonymous == 0 ? $post->user->f_name .' '.$post->user->l_name : 'Anonymous ' }}</p><br>
-                                <p class="d-inline ml-2">{{ $post->created_at }}</p>
+                                <p class="d-inline ml-2"><a href="#">{{  $post->is_anonymous == 0 ? $post->user->f_name .' '.$post->user->l_name : 'Anonymous ' }}</a></p><br>
+                                <p class="d-inline ml-2">{{ $post->created_at->diffForHumans() }}</p>
                             </div>
                             <h5 class="mp-5 ">{{ $post->body }}</h5>
                             <hr>
@@ -79,7 +79,7 @@
                                     </div>
                                 </form>
                             </div><br>
-                            <div class="mt-2">
+                            <div>
                                 @foreach ($post->comments as $comment)
                                         <div class="cardcomment row mb-3">
                                             <div class=" col-md-1">
@@ -105,7 +105,7 @@
                                             </div>
                                         </div>
                                     {{-- replay --}}
-                                    <div class="container" id="myDIVcomment{{ $count }}reply{{ $comment->id }}" style="display:none">
+                                    <div class="container col-md-11 mb-5" id="myDIVcomment{{ $count }}reply{{ $comment->id }}" style="display:none">
                                         <form  method="post" action="{{ route('reply.store') }}"  class="text-muted m-2">
                                             @csrf
                                             <input type="hidden" name="source" value="web">
@@ -115,24 +115,39 @@
                                             <div class="form-group">
                                                 <textarea class="form-control" name="body" id="body" rows="2"></textarea>
                                             </div>
-                                            <div class="form-check mb-2">
-                                                <input type="checkbox" name="is_anonymous" value="1" class="form-check-input" id={{ $post->id }}>
-                                                <label class="form-check-label" for={{ $post->id }}>Hide My Name</label>
+                                            <div class="form-inline float-right ">
+                                                <div class="form-check mr-2">
+                                                    <input type="checkbox" name="is_anonymous" value="1" class="form-check-input" id={{ $post->id }}>
+                                                    <label class="form-check-label" for={{ $post->id }}>Hide My Name</label>
+                                                </div>
+                                                <button class="btn btn-success ripple ">Submit Reply</button>
                                             </div>
-                                            <button class="btn btn-outline-primary btn-block">Submit Reply</button>
                                         </form>
-                                    </div>
+
+                                    </div><br>
                                     @foreach ($comment->replies as $reply)
-                                        <div class="ml-5 p-1">
-                                            <div class="mb-2 d-inline"><b>{{  $reply->is_anonymous == 0 ? $reply->user->f_name .' '.$reply->user->l_name : 'Anonymous' }}</b>{{ '  '. $reply->body }}</div>
-                                            @if(Auth::check() && Auth::id() == $reply->user->id)
-                                                <form action="{{ route('reply.destroy', $reply->id)}}" onclick="return confirm('Are you sure, you want to delete this Reply?')" method="post" style="display: inline;">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <input type="hidden" name="id" value="#myanchorid{{ $count}}">
-                                                    <a class="btn text-danger underline ">Delete</a>
-                                                </form>
-                                            @endif
+                                        <div class="ml-5">
+                                            <div class="cardreply row">
+                                                <div class=" col-md-1">
+                                                    <img class="mr-2 " src="{{ $reply->is_anonymous == 1 ? '/img/anonymous.png' : ($reply->user->gender == 'female' ? '/img/female.png' : ($reply->user->gender == 'male' ? '/img/male.png' : '/img/other.png'))}}" class="float-left" >
+                                                </div>
+                                                <div class="col-md-11">
+                                                    <p><b>{{  $reply->is_anonymous == 0 ? $reply->user->f_name .' '.$reply->user->l_name : 'Anonymous' }}</b>{{ '  '. $reply->body }}</p>
+                                                    @if(Auth::check())
+                                                        <a  class="btn underline text-primary">Like</a>
+                                                    @else
+                                                        <a class="btn underline text-primary" style=" text-decoration: none !important; color:black" href="{{ route('login') }}">Like</a>
+                                                    @endif
+                                                    @if(Auth::check() && Auth::id() == $reply->user->id)
+                                                        <form action="{{ route('reply.destroy', $reply->id)}}" onclick="return confirm('Are you sure, you want to delete this Reply?')" method="post" style="display: inline;">
+                                                            @csrf
+                                                            @method('delete')
+                                                            <input type="hidden" name="id" value="#myanchorid{{ $count}}">
+                                                            <a class="btn text-danger underline ">Delete</a>
+                                                        </form>
+                                                    @endif
+                                                </div>
+                                            </div>
                                         </div>
                                     @endforeach
                                     {{-- end of replay --}}
