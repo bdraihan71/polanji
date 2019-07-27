@@ -43,6 +43,12 @@ class PostController extends Controller
         return redirect()->back()->with('message','post create successfully');
     }
 
+    public function show($id)
+    {
+        $post = Post::findOrFail($id);
+        return view('post.show', compact('post'));
+    }
+
     public function destroy(Request $request, $id)
     {
         $post = Post::find($id);
