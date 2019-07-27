@@ -29,7 +29,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'body' => 'required',
+            'body' => 'required|min:3|max:1000',
         ]);
 
         $is_anonymous = $request->get('is_anonymous') ? 1 : 0;
@@ -40,7 +40,7 @@ class PostController extends Controller
             'is_anonymous' =>  $is_anonymous,
         ]);
         $post->save();
-        return redirect()->back();
+        return redirect()->back()->with('message','post create successfully');
     }
 
     public function destroy(Request $request, $id)

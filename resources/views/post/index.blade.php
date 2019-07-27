@@ -4,6 +4,14 @@
 <div class="container infinite-scroll mt-5">
     <div class="row justify-content-center ">
         <div class="col-md-8">
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    <div class=" text-danger mb-2">{{$error}}</div>
+                @endforeach
+            @endif
+            @if(session('message'))
+                <div class="text-success">{{session('message')}}</div>
+            @endif
             {{-- create post --}}
             @if(Auth::check())
                 <div class="card mb-3 card-1">

@@ -16,7 +16,7 @@ class CreateCommentsTable extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->softDeletes();
-            $table->string('body');
+            $table->longtext('body');
             $table->bigInteger('user_id');
             $table->bigInteger('post_id');
             $table->boolean('is_anonymous')->default(false);

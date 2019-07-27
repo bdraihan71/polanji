@@ -13,7 +13,7 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'body' => 'required',
+            'body' => 'required|min:3|max:1000',
         ]);
 
         $is_anonymous = $request->get('is_anonymous') ? 1 : 0;
