@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Post;
 use App\Comment;
 use Auth;
+use App\Like;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 

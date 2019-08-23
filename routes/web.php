@@ -15,7 +15,7 @@
 //     return view('welcome');
 // });
 
-Route::get('/', 'PostController@index')->name('post.index');
+Route::get('/', 'ReplyController@index')->name('post.index');
 
 Route::middleware(['auth'])->group(function () {
     //post
@@ -31,6 +31,11 @@ Route::middleware(['auth'])->group(function () {
     //reply
     Route::post('/reply', 'ReplyController@store')->name('reply.store');
     Route::delete('/reply/{id}', 'ReplyController@destroy')->name('reply.destroy');
+
+    //like
+    // Route::get('/likes', 'LikeController@index')->name('post.index');
+    // Route::patch('/like/{id}', 'PostController@update')->name('post.update');
+
 });
 
 Auth::routes();

@@ -51,7 +51,7 @@
                             <h5 class="mp-5 ">{{ $post->body }}</h5>
                             <hr>
                             @if(Auth::check())
-                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="#"><i class="far fa-thumbs-up"></i> Like</a></button>
+                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="#"><i class="far fa-thumbs-up"></i>{{ $post->likes->count() }} Like</a></button>
                                 <button onclick="myFunction({{ $count }}, 'comment', 'reply', {{ $replycount }})" class="btn btn-white"><i class="far fa-comment"></i> Comment</button>
                                 <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="#"><i class="fas fa-share"></i>
                                     <div class="fb-share-button"
@@ -60,7 +60,7 @@
                                   </div>
                                 </a></button>
                             @else
-                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}"><i class="far fa-thumbs-up"></i> Like</a></button>
+                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}"><i class="far fa-thumbs-up"></i>{{ $post->likes->count }} Like</a></button>
                                 <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}"><i class="far fa-comment"></i> Comment</a></button>
                                 <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}"><i class="fas fa-share"></i> Share</a></button>
                             @endif
