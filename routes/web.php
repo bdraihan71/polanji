@@ -15,7 +15,7 @@
 //     return view('welcome');
 // });
 
-Route::get('/', 'ReplyController@index')->name('post.index');
+Route::get('/', 'PostController@index')->name('post.index');
 
 Route::middleware(['auth'])->group(function () {
     //post

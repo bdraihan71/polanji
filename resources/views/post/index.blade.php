@@ -51,7 +51,7 @@
                             <h5 class="mp-5 ">{{ $post->body }}</h5>
                             <hr>
                             @if(Auth::check())
-                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="#"><i class="far fa-thumbs-up"></i>{{ $post->likes->count() }} Like</a></button>
+                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="#"><i class="far fa-thumbs-up"></i> Like</a></button>
                                 <button onclick="myFunction({{ $count }}, 'comment', 'reply', {{ $replycount }})" class="btn btn-white"><i class="far fa-comment"></i> Comment</button>
                                 <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="#"><i class="fas fa-share"></i>
                                     <div class="fb-share-button"
@@ -60,7 +60,7 @@
                                   </div>
                                 </a></button>
                             @else
-                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}"><i class="far fa-thumbs-up"></i>{{ $post->likes->count }} Like</a></button>
+                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}"><i class="far fa-thumbs-up"></i> Like</a></button>
                                 <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}"><i class="far fa-comment"></i> Comment</a></button>
                                 <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}"><i class="fas fa-share"></i> Share</a></button>
                             @endif
@@ -190,8 +190,6 @@
         x.style.display = "none";
     }
     }
-
-
     (function(d, s, id) {
     var js, fjs = d.getElementsByTagName(s)[0];
     if (d.getElementById(id)) return;
@@ -199,5 +197,4 @@
     js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
-
 </script>
