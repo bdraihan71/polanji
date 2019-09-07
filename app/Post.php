@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Like;
+use App\PostLikeController;
 class Post extends PolanjiModel
 {
     protected $dates = [
@@ -32,18 +33,18 @@ class Post extends PolanjiModel
         return $this->belongsTo('App\Category');
     }
 
-    public function tags()
+    public function tag()
     {
         return $this->belongsToMany('App\Tag');
     }
 
-    public function likes()
+    public function postLikes()
     {
-        return $this->hasMany('App\Like');
+        return $this->hasMany('App\PostLike');
     }
 
-    public function getFullNameAttribute()
-    {
-        return 12;
-    }
+    // public function getFullNameAttribute()
+    // {
+    //     return 12;
+    // }
 }

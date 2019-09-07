@@ -51,7 +51,16 @@
                             <h5 class="mp-5 ">{{ $post->body }}</h5>
                             <hr>
                             @if(Auth::check())
-                                <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="#"><i class="far fa-thumbs-up"></i> Like</a></button>
+                                <span>{{ $post->postLikes->count() }}</span>
+                                <form method="post" action="{{ route('postlike.update', $post->id) }}"  class="d-inline ">
+                                    @method('patch')
+                                    @csrf
+                                    <input type="hidden" value="1" name="is_liked">
+                                    <input type="hidden" name="post_id" value="#myanchorid{{ $count}}">
+                                    <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" ><i class="far fa-thumbs-up"></i>
+                                        like
+                                    </a></button>
+                                </form>
                                 <button onclick="myFunction({{ $count }}, 'comment', 'reply', {{ $replycount }})" class="btn btn-white"><i class="far fa-comment"></i> Comment</button>
                                 <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="#"><i class="fas fa-share"></i>
                                     <div class="fb-share-button"
@@ -65,7 +74,7 @@
                                 <button class="btn btn-white"><a style=" text-decoration: none !important; color:black" href="{{ route('login') }}"><i class="fas fa-share"></i> Share</a></button>
                             @endif
                             @if(Auth::check() && Auth::id() == $post->user->id)
-                                <form action="{{ route('post.destroy', ['post' => $post->id])}}" onclick="return confirm('Are you sure, you want to delete this post?')" method="post" style="display: inline;">
+                                <form action="{{ route('post.destroy', $post->id)}}" onclick="return confirm('Are you sure, you want to delete this post?')" method="post" style="display: inline;">
                                     @csrf
                                     @method('delete')
                                     <input type="hidden" name="id" value="#myanchorid{{ $count}}">
@@ -112,7 +121,7 @@
                                                         @csrf
                                                         @method('delete')
                                                         <input type="hidden" name="id" value="#myanchorid{{ $count}}">
-                                                        <a class="btn text-danger underline">Delete</a>
+                                                        <button class="btn btn-white text-danger">Delete</button>
                                                     </form>
                                                 @endif
                                             </div>
@@ -156,7 +165,7 @@
                                                             @csrf
                                                             @method('delete')
                                                             <input type="hidden" name="id" value="#myanchorid{{ $count}}">
-                                                            <a class="btn text-danger underline ">Delete</a>
+                                                            <button class="btn btn-white text-danger ">Delete</button>
                                                         </form>
                                                     @endif
                                                 </div>

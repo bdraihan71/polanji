@@ -32,12 +32,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/reply', 'ReplyController@store')->name('reply.store');
     Route::delete('/reply/{id}', 'ReplyController@destroy')->name('reply.destroy');
 
-    //like
+    // post like
     // Route::get('/likes', 'LikeController@index')->name('post.index');
-    // Route::patch('/like/{id}', 'PostController@update')->name('post.update');
+    Route::patch('/post-like/{id}', 'PostLikeController@update')->name('postlike.update');
 
 });
 
 Auth::routes();
 
 // Route::get('/home', 'HomeController@index')->name('home');
+ Route::get('/test', 'TestController@index');
